@@ -6,7 +6,7 @@ import time
 import random
 import moreSpace
 
-buildVer = 0.2
+buildVer = 0.21
 playerHealth = 5
 enemyHealth = 10
 encounterActive = 1

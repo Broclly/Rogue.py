@@ -1,0 +1,14 @@
+    __  __     ____      __
+   / / / /__  / / /___  / /
+  / /_/ / _ \/ / / __ \/ / 
+ / __  /  __/ / / /_/ /_/  
+/_/ /_/\___/_/_/\____(_)   
+                           
+
+If this is your first time playing a python terminal based game, then here is a setup guide for you!
+
+1. Download python using either your own installer or the installer bundled in the github file.
+2. Double click on the main.py, and run the file in python!
+3. Follow the instructions and have fun!
+
+If you have any suggestions for mechanics/features, email them to me at Brocllywastaken@gmail.com
