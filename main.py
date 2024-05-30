@@ -9,7 +9,7 @@ import assets.weapons
 import assets.charms 
 
 oneTimer = 0
-buildVer = 0.21
+buildVer = 0.31
 playerHealth = 5
 enemyHealth = 10
 encounterActive = 1
