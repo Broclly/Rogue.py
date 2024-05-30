@@ -4,15 +4,25 @@
 
 import time
 import random
-import moreSpace
+import assets.moreSpace
+import assets.weapons 
+import assets.charms 
 
+oneTimer = 0
 buildVer = 0.21
 playerHealth = 5
 enemyHealth = 10
 encounterActive = 1
 welcomeComplete = 0
-criticalMulti = 2
+criticalMulti = 4
 guardActive = 1
+guardSpam = 1
+perfectParryActive = 0
+
+playerEquipped = {
+    "weapon" : "starter sword",
+    "charm" : "no"
+}
 
 def anyKey():
     input("Press enter to continue...")
@@ -21,9 +31,13 @@ def softClose():
     input("Press enter to quit...")
     exit()
 
+def autoClose():
+    time.sleep(3)
+    exit()
+
 def welcome():
     print("~Project by Broclly~")
-    moreSpace.small()
+    assets.moreSpace.small()
     time.sleep(1/4)
     print("Greetings, welcome to Rogue.py!")
     time.sleep(1/4)
@@ -34,10 +48,16 @@ def welcome():
 
 def enemyTurn():
     global enemyHit
-    enemyHit = random.randint(0,2)
+    enemyHit = random.randint(0,1)
     global playerHealth
-    enemyDamage = enemyHit * guardActive
-    print("You were hit for", enemyDamage, "damage!")
+    enemyDamage = (enemyHit * guardActive) - perfectParryActive
+
+    if enemyDamage < 0:
+        print("You feel invigorated by your blocking skills!")
+        print("You were HEALED for ", (enemyDamage * enemyDamage), "health!")
+    else:
+        print("You were hit for", enemyDamage, "damage!")
+
     playerHealth = playerHealth - enemyDamage
     print("You have", playerHealth, "health left!")
     
@@ -61,27 +81,37 @@ def playerTurn():
         playerAttack()
 
 def playerGuard():
+    print("You hold up your guard...")
     global guardActive
-    guardActive = 1
-    guardHit = random.randint(0,2)
-    if guardHit == 2:
-        print("Guard Sucessful!")
-        guardActive = 0
+    global guardSpam
+    global perfectParryActive 
+    guardActive = 0
+    perfectParry = random.randint(0, (5* guardSpam))
+    print(5*guardSpam)
+    guardSpam = guardSpam + 1
+    if perfectParry == 3:
+        perfectParryActive = 1
+        print("PERFECT BLOCK! PARRY ACTIVE!")
     else:
-        print("Guard Failed!")
-        guardActive = 1
-
+        perfectParryActive = 0
 
 def playerAttack():
+    global playerHit
+    global guardSpam
+    global perfectParryActive
+    global guardActive
+    perfectParryActive = 0
+    guardSpam = 1
+    guardActive = 1
     playerHit = random.randint(0,1)
     global enemyHealth
     critCheck()
     if playerHit == 0:
-         damage = (playerHit + critActive)* criticalMulti
+         damage = 0
          print("Attack Failed!")
          print("You hit the enemy for", damage, "damage!")
     else:
-        damage = (playerHit)* criticalMulti
+        damage = (criticalMulti*critActive) + playerHit
         enemyHealth = enemyHealth - damage
         print("You hit the enemy for", damage, "damage!")
     
@@ -90,9 +120,10 @@ def playerAttack():
 def critCheck():
     critHit = random.randint(0,10)
     if critHit == 0:
-        global critActive
-        critActive = 1
-        print("CRITICAL HIT!")
+        if playerHit == 1:
+            global critActive
+            critActive = 1
+            print("CRITICAL HIT!")
     else:
         critActive = 0
 
@@ -100,28 +131,43 @@ def check():
     if playerHealth <= 0:
         print("You died! Try again :(")
         time.sleep(3)
+        softClose()
     if enemyHealth <= 0:
         print("You have successfully eliminated the enemy!")
         global encounterActive
         encounterActive = 0
-        softClose()
+        playAgain = input("Play again? Y/N? (Your progress will carry over)")
+        if playAgain == "y" or "Y":
+            encounterActive = 1
+            global oneTimer
+            oneTimer = 0
+        if playAgain == "n" or "N":
+            print("Closing game!")
+            autoClose()
     if enemyHealth == 0 and playerHealth == 0:
         print("When the dust settles, neither of you survive...")
         time.sleep(5)
+        autoClose()
 
 def enemyEncounter():
-    if encounterActive == 1:
+    global oneTimer
+    while encounterActive == 1:
+        if oneTimer == 0:
+            print("An enemy appears! Fight it for victory!")
+            global enemyHealth
+            enemyHealth = 10
+            oneTimer = 1
         playerTurn()
         time.sleep(1)
         enemyTurn()
         time.sleep(3)
         check()
-        moreSpace.normal()
+        assets.moreSpace.normal()
         time.sleep(2)   
 
 while playerHealth > 0:
     if welcomeComplete == 0:
         welcome()
         welcomeComplete = 1
-        moreSpace.normal()
+        assets.moreSpace.normal()
     enemyEncounter()
