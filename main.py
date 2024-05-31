@@ -9,7 +9,7 @@ import assets.weapons
 import assets.charms 
 
 oneTimer = 0
-buildVer = 0.31
+buildVer = 0.32
 playerHealth = 5
 enemyHealth = 10
 encounterActive = 1
@@ -87,7 +87,6 @@ def playerGuard():
     global perfectParryActive 
     guardActive = 0
     perfectParry = random.randint(0, (5* guardSpam))
-    print(5*guardSpam)
     guardSpam = guardSpam + 1
     if perfectParry == 3:
         perfectParryActive = 1
