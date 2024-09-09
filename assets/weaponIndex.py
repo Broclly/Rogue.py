@@ -5,17 +5,17 @@
 starterSword = {
     "weaponDMG": 1,
     "critChance": 10,
-    "hitChance" : 0,
+    "hitChance" : 2,
 }
 beautifulBlade = {
     "weaponDMG": 3,
     "critChance": 10,
-    "hitChance" : 0,
+    "hitChance" : 2,
 }
 heavyHitter = {
-    "weaponDMG": 5,
+    "weaponDMG": 7,
     "critChance": 10,
-    "hitChance" : 0,
+    "hitChance" : 5,
 }
 adminBlade = {
     "weaponDMG" : 10,

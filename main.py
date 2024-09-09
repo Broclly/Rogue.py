@@ -12,7 +12,7 @@ import assets.charms
 import assets.weapons
 
 oneTimer = 0
-buildVer = 0.32
+buildVer = 0.41
 playerHealth = 5
 enemyHealth = 2
 encounterActive = 1
@@ -67,7 +67,11 @@ def playerTurn():
     time.sleep(1/2)
     print("2. Attack")
     time.sleep(1/2)
-    playerTurnChoice = int(input("Make your choice! "))
+    try:
+        playerTurnChoice = int(input("Make your choice! "))
+    except ValueError: 
+        print("Invalid Response! Please provide a number instead")
+        playerTurn()
 
     if playerTurnChoice == 1:
         print("You chose guard!")
@@ -105,7 +109,7 @@ def playerAttack():
     playerHit = random.randint(1,assets.weapons.hitChance)
     global enemyHealth
     critCheck()
-    if playerHit == 0:
+    if playerHit != 1:
          damage = 0
          print("Attack Failed!")
          print("You hit the enemy for", damage, "damage!")
