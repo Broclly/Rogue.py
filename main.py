@@ -4,25 +4,23 @@
 
 import time
 import random
+import assets.playerData
 import assets.moreSpace
+import assets.weaponIndex
 import assets.weapons 
 import assets.charms 
+import assets.weapons
 
 oneTimer = 0
 buildVer = 0.32
 playerHealth = 5
-enemyHealth = 10
+enemyHealth = 2
 encounterActive = 1
 welcomeComplete = 0
 criticalMulti = 4
 guardActive = 1
 guardSpam = 1
 perfectParryActive = 0
-
-playerEquipped = {
-    "weapon" : "starter sword",
-    "charm" : "no"
-}
 
 def anyKey():
     input("Press enter to continue...")
@@ -98,11 +96,13 @@ def playerAttack():
     global playerHit
     global guardSpam
     global perfectParryActive
-    global guardActive
+    global attackDMG
+    assets.weapons.swordCheck()
+    attackDMG = assets.weapons.weaponDMG
     perfectParryActive = 0
     guardSpam = 1
     guardActive = 1
-    playerHit = random.randint(0,1)
+    playerHit = random.randint(1,assets.weapons.hitChance)
     global enemyHealth
     critCheck()
     if playerHit == 0:
@@ -110,14 +110,15 @@ def playerAttack():
          print("Attack Failed!")
          print("You hit the enemy for", damage, "damage!")
     else:
-        damage = (criticalMulti*critActive) + playerHit
+        damage = (criticalMulti*critActive) + attackDMG
+
         enemyHealth = enemyHealth - damage
         print("You hit the enemy for", damage, "damage!")
     
     print("The enemy has", enemyHealth, "health left!")
 
 def critCheck():
-    critHit = random.randint(0,10)
+    critHit = random.randint(0,assets.weapons.critChance)
     if critHit == 0:
         if playerHit == 1:
             global critActive
@@ -135,18 +136,23 @@ def check():
         print("You have successfully eliminated the enemy!")
         global encounterActive
         encounterActive = 0
-        playAgain = input("Play again? Y/N? (Your progress will carry over)")
-        if playAgain == "y" or "Y":
-            encounterActive = 1
-            global oneTimer
-            oneTimer = 0
-        if playAgain == "n" or "N":
-            print("Closing game!")
-            autoClose()
+        equipmentRoll()
+        enemyEncounter()
+        encounterActive = 1
+        global oneTimer
+        oneTimer = 0
     if enemyHealth == 0 and playerHealth == 0:
         print("When the dust settles, neither of you survive...")
         time.sleep(5)
         autoClose()
+
+def equipmentRoll():
+    rollActive = random.randint(1,1)
+
+    if rollActive ==  1:
+        gearType = random.randint(1,1)
+        if gearType == 1:
+            assets.weapons.weaponRoll()
 
 def enemyEncounter():
     global oneTimer
